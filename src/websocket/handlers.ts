@@ -3,6 +3,7 @@ import { ClientMessage } from "../types/messages.js";
 
 export function handleOpen(ws: WebSocket, roomManager: RoomManager) {
   // noop for now
+  console.log("WebSocket opened");
   ws.send(JSON.stringify({ type: "connected" }));
 }
 
@@ -11,6 +12,7 @@ export function handleMessage(
   data: string,
   roomManager: RoomManager
 ) {
+  console.log("Received message:", data);
   let msg: ClientMessage;
   try {
     msg = JSON.parse(data);
@@ -42,5 +44,6 @@ export function handleMessage(
 }
 
 export function handleClose(ws: WebSocket, roomManager: RoomManager) {
+  console.log("WebSocket closed");
   roomManager.removePlayer(ws);
 }
