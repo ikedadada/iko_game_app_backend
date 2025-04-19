@@ -32,10 +32,13 @@ RUN adduser --system --uid 1001 hono
 
 # Automatically leverage output traces to reduce image size
 # https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=builder --chown=hono:nodejs /app/.dist ./.dist
+COPY --from=deps /app/node_modules ./node_modules
+COPY --from=builder --chown=hono:nodejs /app/dist ./dist
 
 USER hono
 
 EXPOSE 8000
 
 ENV PORT=8000
+
+CMD ["node", "./dist/server.js"]
