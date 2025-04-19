@@ -8,7 +8,12 @@ export type ClientMessage =
 
 export type ServerMessage =
   | { type: "connected" }
-  | { type: "set-players"; roomId: string; players: { name: string }[] }
+  | { type: "assigned"; playerId: string }
+  | {
+      type: "set-players";
+      roomId: string;
+      players: { name: string; playerId: string }[];
+    }
   | { type: "start-game"; number: number }
   | { type: "show-own-number"; canSee: Record<string, number> }
   | { type: "reset-game" }

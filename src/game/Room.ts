@@ -12,10 +12,11 @@ export class Room {
     }
     const player = new Player(name, socket, this.roomId);
     this.players.push(player);
+    socket.send(JSON.stringify({ type: "assigned", playerId: player.id }));
     this.broadcast({
       type: "set-players",
       roomId: this.roomId,
-      players: this.players.map((p) => ({ name: p.name })),
+      players: this.getPlayers(),
     });
   }
 
@@ -37,7 +38,7 @@ export class Room {
     const sender = this.players.find((p) => p.socket === socket);
     if (!sender || sender.number === undefined) return;
     this.players.forEach((p) => {
-      p.canSee[sender.name] = sender.number!;
+      p.canSee[sender.id] = sender.number!;
       p.socket.send(
         JSON.stringify({
           type: "show-own-number",
@@ -62,13 +63,20 @@ export class Room {
       this.broadcast({
         type: "set-players",
         roomId: this.roomId,
-        players: this.players.map((p) => ({ name: p.name })),
+        players: this.getPlayers(),
       });
     }
   }
 
   getPlayerBySocket(socket: WebSocket) {
     return this.players.find((p) => p.socket === socket);
+  }
+
+  private getPlayers() {
+    return this.players.map((p) => ({
+      name: p.name,
+      id: p.id,
+    }));
   }
 
   private broadcast(message: any) {
