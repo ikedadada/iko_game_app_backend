@@ -17,7 +17,7 @@ COPY . .
 
 # Install dependencies based on the preferred package manager
 COPY package.json package-lock.json ./
-RUN npm build
+RUN npm run build
 
 # Production image, copy all the files and run next
 FROM base AS runner
