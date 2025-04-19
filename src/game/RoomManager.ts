@@ -1,5 +1,5 @@
-import { Room } from "./Room";
-import { Player } from "./Player";
+import { Room } from "./Room.js";
+import { Player } from "./Player.js";
 
 export class RoomManager {
   private rooms = new Map<string, Room>();

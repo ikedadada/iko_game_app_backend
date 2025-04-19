@@ -1,5 +1,5 @@
-import { RoomManager } from "@/game/RoomManager";
-import { ClientMessage } from "../types/messages";
+import { RoomManager } from "../game/RoomManager.js";
+import { ClientMessage } from "../types/messages.js";
 
 export function handleOpen(ws: WebSocket, roomManager: RoomManager) {
   // noop for now

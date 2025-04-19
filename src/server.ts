@@ -4,8 +4,12 @@ import { Hono } from "hono";
 import { createNodeWebSocket } from "@hono/node-ws";
 import { WSEvents } from "hono/ws";
 
-import { handleMessage, handleOpen, handleClose } from "@/websocket/handlers";
-import { RoomManager } from "@/game/RoomManager";
+import {
+  handleMessage,
+  handleOpen,
+  handleClose,
+} from "./websocket/handlers.js";
+import { RoomManager } from "./game/RoomManager.js";
 
 const app = new Hono();
 app.get("/healthcheck", (c) => c.text("healthy"));
