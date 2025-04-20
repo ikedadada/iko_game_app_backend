@@ -10,8 +10,10 @@ import {
   handleClose,
 } from "./websocket/handlers.js";
 import { RoomManager } from "./game/RoomManager.js";
+import { logMiddleware, logger } from "./utils/logger.js";
 
 const app = new Hono();
+app.use(logMiddleware());
 app.get("/healthcheck", (c) => c.text("healthy"));
 const { injectWebSocket, upgradeWebSocket } = createNodeWebSocket({ app });
 const roomManager = new RoomManager();
@@ -37,6 +39,9 @@ app.get(
 
 const port = parseInt(process.env.PORT || "8000");
 const server = serve({ fetch: app.fetch, port }, (info) => {
-  console.log(`Server is running on http://localhost:${info.port}`);
+  logger.info({
+    type: "server",
+    message: `Server started on port ${info.port}`,
+  });
 });
 injectWebSocket(server);

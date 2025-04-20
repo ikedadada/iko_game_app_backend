@@ -8,6 +8,7 @@ export class Room {
     const isPlaying = this.players.some((p) => p.number !== undefined);
     if (isPlaying) {
       socket.send(JSON.stringify({ type: "game-already-started" }));
+      socket.close();
       return;
     }
     const player = new Player(name, socket, this.roomId);

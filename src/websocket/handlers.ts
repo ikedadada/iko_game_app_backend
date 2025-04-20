@@ -1,9 +1,13 @@
 import { RoomManager } from "../game/RoomManager.js";
 import { ClientMessage } from "../types/messages.js";
+import { logger } from "../utils/logger.js";
 
 export function handleOpen(ws: WebSocket, roomManager: RoomManager) {
   // noop for now
-  console.log("WebSocket opened");
+  logger.info({
+    type: "websocket",
+    message: "WebSocket connection opened",
+  });
   ws.send(JSON.stringify({ type: "connected" }));
 }
 
@@ -12,12 +16,21 @@ export function handleMessage(
   data: string,
   roomManager: RoomManager
 ) {
-  console.log("Received message:", data);
+  logger.info({
+    type: "websocket",
+    message: "WebSocket message received",
+    data,
+  });
   let msg: ClientMessage;
   try {
     msg = JSON.parse(data);
   } catch (e) {
-    console.error("Failed to parse message:", data);
+    logger.error({
+      type: "websocket",
+      message: "Failed to parse message",
+      error: e,
+      data,
+    });
     return;
   }
 
@@ -39,11 +52,19 @@ export function handleMessage(
       roomManager.resetGame(roomId);
       break;
     default:
-      console.warn("Unknown message type:", msg);
+      logger.warn({
+        type: "websocket",
+        message: "Unknown message type",
+        data,
+      });
+      break;
   }
 }
 
 export function handleClose(ws: WebSocket, roomManager: RoomManager) {
-  console.log("WebSocket closed");
+  logger.info({
+    type: "websocket",
+    message: "WebSocket connection closed",
+  });
   roomManager.removePlayer(ws);
 }
